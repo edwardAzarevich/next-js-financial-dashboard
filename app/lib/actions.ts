@@ -1,10 +1,11 @@
 "use server";
 
 import postgres from "postgres";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
-
-import { z } from "zod";
 
 const FormSchema = z.object({
   id: z.string(),
@@ -29,4 +30,7 @@ export async function createInvoice(formData: FormData) {
      INSERT INTO invoices (customer_id, amount, status, date)
      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
    `;
+
+  revalidatePath("/dashboard/invoices");
+  redirect("/dashboard/invoices");
 }
