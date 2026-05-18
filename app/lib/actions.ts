@@ -191,7 +191,6 @@ export async function register(
       email: formData.get("email"),
       password: formData.get("password"),
     });
-  console.log(validatedFields);
 
   if (!validatedFields.success) {
     return "Invalid input data.";
