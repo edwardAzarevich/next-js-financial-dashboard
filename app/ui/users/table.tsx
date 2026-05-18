@@ -1,11 +1,6 @@
 import { getUsers } from "@/app/lib/action/user";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import { DeleteUser } from "./buttons";
 
 interface UsersTableProps {
   users: Awaited<ReturnType<typeof getUsers>>;
@@ -38,6 +33,7 @@ export default function UsersTable({ users }: UsersTableProps) {
                         <p className="text-sm text-gray-500">{user.email}</p>
                       </div>
                     </div>
+                    <DeleteUser id={user.id} />
                   </div>
                 </div>
               ))}
@@ -69,6 +65,11 @@ export default function UsersTable({ users }: UsersTableProps) {
                     </td>
                     <td className="whitespace-nowrap px-3 py-3">
                       {user.email}
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
+                        <DeleteUser id={user.id} />{" "}
+                      </div>
                     </td>
                   </tr>
                 ))}
