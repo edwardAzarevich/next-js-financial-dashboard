@@ -1,7 +1,6 @@
 import { getUsers } from "@/app/lib/action/user";
 import { CustomersTableSkeleton } from "@/app/ui/skeleton/skeleton";
 import UsersTable from "@/app/ui/users/table";
-import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 
 export default async function Page() {
