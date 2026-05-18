@@ -10,6 +10,7 @@ export async function getUsers() {
       FROM users
       ORDER BY name ASC
       `;
+
     return users;
   } catch (error) {
     console.error("Database Error:", error);

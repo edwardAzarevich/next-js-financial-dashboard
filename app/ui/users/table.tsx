@@ -1,3 +1,4 @@
+import { getUsers } from "@/app/lib/action/user";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 interface User {
@@ -7,7 +8,7 @@ interface User {
 }
 
 interface UsersTableProps {
-  users: User[];
+  users: Awaited<ReturnType<typeof getUsers>>;
 }
 
 export default function UsersTable({ users }: UsersTableProps) {
