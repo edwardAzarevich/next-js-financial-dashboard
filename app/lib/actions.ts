@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import bcrypt from "bcrypt";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -173,4 +174,50 @@ export async function authenticate(
     }
     throw error;
   }
+}
+
+export async function register(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  const validatedFields = z
+    .object({
+      name: z.string().min(1, "Name is required"),
+      email: z.string().email("Invalid email address"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+    })
+    .safeParse({
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+    });
+  console.log(validatedFields);
+
+  if (!validatedFields.success) {
+    return "Invalid input data.";
+  }
+
+  const { name, email, password } = validatedFields.data;
+
+  const existingUser = await sql`
+    SELECT * FROM users WHERE email = ${email}
+  `;
+
+  if (existingUser.length > 0) {
+    return "User with this email already exists.";
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${hashedPassword})
+    `;
+  } catch (error) {
+    console.error("Registration error:", error);
+    return "Something went wrong. Please try again.";
+  }
+
+  redirect("/login?registered=true");
 }
