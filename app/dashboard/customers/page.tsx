@@ -1,4 +1,4 @@
-import { getCustomers } from "@/app/lib/action/customerAction";
+import { getCustomers } from "@/app/lib/action/customer";
 import CustomersTable from "@/app/ui/customers/table";
 import { CustomersTableSkeleton } from "@/app/ui/skeleton/skeleton";
 import { Metadata } from "next";
